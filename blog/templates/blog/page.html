@@ -10,15 +10,16 @@
 <body>
 
 <div class="page-header">
-	<a href="{% url 'blog:post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+	<a style="float: right;" href="{% url 'blog:post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
 	<h1><a href="{{ home }}">Home</a></h1>
 </div>
 
 {% for blog in blog_list %}
 <div class="post">
+	<h6><p style="float: right;">{{ blog.publish_date }}</p></h6>
 	<h2><a href="{% url 'blog:detail' pk=blog.id %}">{{ blog.title }}</a></h2>
-	<h6><p>published:{{ blog.publish_date }}</p></h6>
 	<h4><p class="line-limit-length">{{ blog.text|linebreaksbr }}</p></h4>
+	<hr>
 </div>
 {% endfor %}
 
