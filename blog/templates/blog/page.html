@@ -1,3 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>page{{ page }}</title>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+	{% load static %}
+	<link rel="stylesheet" type="text/css" href="{% static 'blog/page.css' %}">
+</head>
+<body>
+
+<div class="page-header">
+	<a href="{% url 'blog:post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+	<h1><a href="{{ home }}">Home</a></h1>
+</div>
+
 {% for blog in blog_list %}
-<p>{{ blog }}</p>
+<div class="post">
+	<h2><a href="{% url 'blog:detail' pk=blog.id %}">{{ blog.title }}</a></h2>
+	<h6><p>published:{{ blog.publish_date }}</p></h6>
+	<h4><p class="line-limit-length">{{ blog.text|linebreaksbr }}</p></h4>
+</div>
 {% endfor %}
+
+<div>
+	<button onclick="window.location.href='{{ homePage }}'" {% if not homePage %} disabled  {% endif %} >首&nbsp;&nbsp;页</button>
+	<button onclick="window.location.href='{{ previousPage }}'" {% if not previousPage %} disabled  {% endif %} >上一页</button>
+	<button onclick="window.location.href='{{ nextPage }}'" {% if not nextPage %} disabled  {% endif %} >下一页</button>
+	<button onclick="window.location.href='{{ lastPage }}'" {% if not lastPage %} disabled  {% endif %} >尾&nbsp;&nbsp;页</button>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+body{
+	padding:15px;
+}
+
+.line-limit-length{
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+h1 a{
+	color: white;
+}
+
+.page-header{
+	background: orange;
+}
