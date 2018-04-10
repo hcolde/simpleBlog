@@ -1,0 +1,18 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'blog/style.css' %}">
+<a href="{% url 'blog:index' %}">Home</a>
+<p>搜索到<label style="color:green;">{{ titleCount }}</label>篇标题包含<label style="color:red;">{{ keyWord }}</label>的文章</p>
+<ul>
+	{% for blogTitle in title %}
+	<li><a href="{% url 'blog:detail' pk=blogTitle.id %}">{{ blogTitle.title|safe }}</a></li>
+	{% endfor %}
+</ul>
+
+<hr>
+
+<p>搜索到<label style="color:green;">{{ textCount }}</label>篇内容包含<label style="color:red;">{{ keyWord }}</label>的文章</p>
+<ul>
+	{% for blogText in text %}
+	<li><a href="{% url 'blog:detail' pk=blogText.id %}">{{ blogText.text|safe }}</a></li>
+	{% endfor %}
+</ul>

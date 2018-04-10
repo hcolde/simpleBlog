@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic
 from .models import Post
 from .forms import PostForm
@@ -44,3 +44,44 @@ def PostView(request):
 	else:
 		form = PostForm()
 	return render(request, 'blog/post_edit.html', {'form':form})
+
+
+def ModifyView(request, blog_id):
+	if request.method == 'POST':
+		form = PostForm(request.POST)
+		if form.is_valid():
+			blog = Post.objects.get(pk = blog_id)
+			post = form.save(commit=False)
+			blog.title = post.title
+			blog.text = post.text
+			blog.save()
+			return redirect('blog:detail', pk = blog_id)
+	else:
+		blog = get_object_or_404(Post, pk = blog_id)
+		formList = {'title':blog.title, 'text':blog.text}
+		form = PostForm(formList)
+	return render(request, 'blog/modify.html', {'form':form})
+
+
+def RemoveView(request, blog_id):
+	blog = get_object_or_404(Post, pk = blog_id).delete()
+	return redirect('blog:index')
+
+
+def SearchView(request):
+	if request.method == 'POST' and request.POST['keyWord']:
+		blogList_title = Post.objects.filter(title__contains=request.POST['keyWord'])
+		blogList_text = Post.objects.filter(text__contains=request.POST['keyWord'])
+		for item in range(len(blogList_title)):
+			blogList_title[item].title = blogList_title[item].title.replace(request.POST['keyWord'], "<label style='color:red;'>"+request.POST['keyWord']+"</label>")
+		for item in range(len(blogList_text)):
+			blogList_text[item].text = blogList_text[item].text.replace(request.POST['keyWord'], "<label style='color:red;'>"+request.POST['keyWord']+"</label>")
+		blogList = {
+			'keyWord': request.POST['keyWord'],
+			'title': blogList_title,
+			'titleCount': len(blogList_title),
+			'text': blogList_text,
+			'textCount': len(blogList_text),
+		}
+		return render(request, 'blog/search.html', blogList)
+	return redirect('blog:index')

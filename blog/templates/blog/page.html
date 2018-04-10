@@ -2,8 +2,7 @@
 <html>
 <head>
 	<title>page{{ page }}</title>
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+	<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	{% load static %}
 	<link rel="stylesheet" type="text/css" href="{% static 'blog/page.css' %}">
 </head>
@@ -14,11 +13,21 @@
 	<h1><a href="{{ home }}">Home</a></h1>
 </div>
 
+<div>
+	<form method="post" action="{% url 'blog:search' %}">
+		{% csrf_token %}
+		<input type="text" name="keyWord" id="keyWord" placeholder="按标题、内容、作者搜索">
+		<button type="submit" >搜索</button>
+	</form>
+</div>
+
 {% for blog in blog_list %}
 <div class="post">
 	<h6><p style="float: right;">{{ blog.publish_date }}</p></h6>
 	<h2><a href="{% url 'blog:detail' pk=blog.id %}">{{ blog.title }}</a></h2>
+	<a style="float: right;" href="{% url 'blog:modify' blog_id=blog.id %}"><span class="glyphicon glyphicon-edit"></span></a>
 	<h4><p class="line-limit-length">{{ blog.text|linebreaksbr }}</p></h4>
+	<span onclick="if (confirm('你正在删除这篇文章')){window.location='{% url "blog:remove" blog_id=blog.id %}' }" style="float: right;" class="glyphicon glyphicon-remove"></span>
 	<hr>
 </div>
 {% endfor %}
